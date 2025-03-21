@@ -1,0 +1,8 @@
+[package]
+org = "tharinduwe"
+name = "choreo_cache_test"
+version = "0.1.0"
+distribution = "2201.12.2"
+
+[build-options]
+observabilityIncluded = true
