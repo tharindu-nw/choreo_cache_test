@@ -6,6 +6,9 @@ import ballerina/log;
 configurable string redisHost = "redis-99131fcf-9c25-444d-b667-32595703bbb0-redissv2014260135-ch.e.aivencloud.com";
 configurable int redisPort = 22930;
 configurable string redisPassword = os:getEnv("REDIS_PASS");
+redis:SecureSocket redisSecureSocket = {
+    verifyMode: redis:FULL
+};
 
 redis:ConnectionConfig redisConfig = {
     connection: {
@@ -16,7 +19,8 @@ redis:ConnectionConfig redisConfig = {
             connectionTimeout: 5
         }
     },
-    connectionPooling: true
+    connectionPooling: true,
+    secureSocket: redisSecureSocket
 };
 redis:Client redisClient = check new (redisConfig);
 
