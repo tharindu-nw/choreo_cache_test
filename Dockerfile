@@ -8,7 +8,7 @@ WORKDIR /home/work-dir/choreo_cache_test
 
 RUN bal build
 
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:21-jre-alpine
 
 RUN mkdir -p /work-dir \
     && addgroup troupe \
