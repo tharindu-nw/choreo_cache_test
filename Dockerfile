@@ -1,5 +1,5 @@
-FROM choreowbcuserappsescargot.azurecr.io/ballerina-central/v2/base:latest AS ballerina-tools-build
-LABEL maintainer "ballerina.io"
+FROM ballerina/ballerina:2201.12.2 AS ballerina-tools-build
+LABEL maintainer="ballerina.io"
 
 USER root
 
@@ -24,7 +24,7 @@ COPY --from=ballerina-tools-build /home/work-dir/choreo_cache_test/target/bin/ch
 
 EXPOSE 2020
 
-ENV JAVA_TOOL_OPTIONS "-XX:+UseContainerSupport -XX:MaxRAMPercentage=80.0 -XX:TieredStopAtLevel=1"
+ENV JAVA_TOOL_OPTIONS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=80.0 -XX:TieredStopAtLevel=1"
 
 USER 10500
 CMD [ "java", "-jar", "choreo_cache_test.jar" ]
