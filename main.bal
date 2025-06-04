@@ -86,4 +86,28 @@ service / on httpListener {
             body: message
         };
     }
+
+    resource function post clear\-cache() returns http:Ok|http:InternalServerError {
+        int|error? deleteError = redisClient->del(["hello"]);
+        if deleteError is error {
+            log:printError("Error deleting cache key", deleteError);
+        } else {
+            log:printInfo("Cache key deleted successfully");
+        }
+        return <http:Ok>{
+            body: "Cache cleared"
+        };
+    }
+
+    resource function post aws\-clear\-cache() returns http:Ok|http:InternalServerError {
+        int|error? deleteError = awsRedisClient->del(["hello"]);
+        if deleteError is error {
+            log:printError("Error deleting AWS Redis cache key", deleteError);
+        } else {
+            log:printInfo("AWS Redis cache key deleted successfully");
+        }
+        return <http:Ok>{
+            body: "AWS Redis cache cleared"
+        };
+    }
 }

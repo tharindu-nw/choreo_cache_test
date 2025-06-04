@@ -1,0 +1,39 @@
+GET http://localhost:2020/cache-item
+
+HTTP/1.1 200  - OK
+content-type: text/plain
+connection: close
+server: ballerina
+date: Wed, 4 Jun 2025 16:24:01 +0530
+content-encoding: gzip
+content-length: 47
+###
+GET http://localhost:2020/aws-cache-item
+
+HTTP/1.1 200  - OK
+content-type: text/plain
+connection: close
+server: ballerina
+date: Wed, 4 Jun 2025 16:23:51 +0530
+content-encoding: gzip
+content-length: 56
+###
+POST http://localhost:2020/clear-cache
+
+HTTP/1.1 200  - OK
+content-type: text/plain
+connection: close
+server: ballerina
+date: Wed, 4 Jun 2025 16:23:53 +0530
+content-encoding: gzip
+content-length: 39
+###
+POST http://localhost:2020/aws-clear-cache
+
+HTTP/1.1 200  - OK
+content-type: text/plain
+connection: close
+server: ballerina
+date: Fri, 23 May 2025 10:24:27 +0530
+content-encoding: gzip
+content-length: 49
