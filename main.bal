@@ -11,6 +11,10 @@ configurable string awsRedisHost = "redis-99131fcf-9c25-444d-b667-32595703bbb0-r
 configurable int awsRedisPort = 22930;
 configurable string awsRedisPassword = os:getEnv("AWS_REDIS_PASS");
 
+configurable string selfHostedRedisHost = "redis-db-3143544472";
+configurable int selfHostedRedisPort = 6379;
+configurable string selfHostedRedisPassword = os:getEnv("SELF_HOSTED_REDIS_PASS");
+
 redis:SecureSocket redisSecureSocket = {
     verifyMode: redis:FULL
 };
@@ -39,6 +43,18 @@ redis:ConnectionConfig awsRedisConfig = {
     },
     connectionPooling: true,
     secureSocket: redisSecureSocket
+};
+
+redis:ConnectionConfig selfHostedRedisConfig = {
+    connection: {
+        host: selfHostedRedisHost,
+        port: selfHostedRedisPort,
+        password: selfHostedRedisPassword,
+        options: {
+            connectionTimeout: 5
+        }
+    },
+    connectionPooling: true
 };
 
 redis:Client redisClient = check new (redisConfig);
@@ -81,6 +97,26 @@ service / on httpListener {
         } else {
             message = <string>cachedMessage;
             log:printInfo("AWS Redis cache hit");
+        }
+        return <http:Ok>{
+            body: message
+        };
+    }
+
+    resource function get self\-hosted\-cache\-item() returns http:Ok|http:InternalServerError {
+        string message = "Hello, World!";
+        string?|error cachedMessage = redisClient->get("hello");
+        if cachedMessage is error {
+            log:printError("Error getting self-hosted cache key", cachedMessage);
+        } else if cachedMessage is () {
+            log:printInfo("Self-hosted cache miss");
+            string|error? setError = redisClient->set("hello", "Hello, World!, Cached from Self-Hosted Redis");
+            if setError is error {
+                log:printError("Error setting self-hosted cache key", setError);
+            }
+        } else {
+            message = <string>cachedMessage;
+            log:printInfo("Self-hosted cache hit");
         }
         return <http:Ok>{
             body: message
