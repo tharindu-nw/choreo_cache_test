@@ -59,6 +59,7 @@ redis:ConnectionConfig selfHostedRedisConfig = {
 
 redis:Client redisClient = check new (redisConfig);
 redis:Client awsRedisClient = check new (awsRedisConfig);
+redis:Client selfHostedRedisClient = check new (selfHostedRedisConfig);
 
 listener http:Listener httpListener = check new (2020);
 
@@ -105,12 +106,12 @@ service / on httpListener {
 
     resource function get self\-hosted\-cache\-item() returns http:Ok|http:InternalServerError {
         string message = "Hello, World!";
-        string?|error cachedMessage = redisClient->get("hello");
+        string?|error cachedMessage = selfHostedRedisClient->get("hello");
         if cachedMessage is error {
             log:printError("Error getting self-hosted cache key", cachedMessage);
         } else if cachedMessage is () {
             log:printInfo("Self-hosted cache miss");
-            string|error? setError = redisClient->set("hello", "Hello, World!, Cached from Self-Hosted Redis");
+            string|error? setError = selfHostedRedisClient->set("hello", "Hello, World!, Cached from Self-Hosted Redis");
             if setError is error {
                 log:printError("Error setting self-hosted cache key", setError);
             }
