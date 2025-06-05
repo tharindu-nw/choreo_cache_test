@@ -54,7 +54,8 @@ redis:ConnectionConfig selfHostedRedisConfig = {
             connectionTimeout: 5
         }
     },
-    connectionPooling: true
+    connectionPooling: true,
+    secureSocket: redisSecureSocket
 };
 
 redis:Client redisClient = check new (redisConfig);
